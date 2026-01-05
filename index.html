@@ -15,31 +15,55 @@
         /* * CSS Variables & Theme Setup 
          */
         :root {
-            /* メインカラー: #2C3E50 (ダークブルー) */
-            --primary-color: #2C3E50;
-            /* アクセントカラー: #E74C3C (レッド) */
+            /* === デフォルト（ダークモード / 黒基調） === */
+            /* メイン文字色: 明るいグレー */
+            --primary-color: #E0E0E0; 
+            /* アクセントカラー: 鮮やかな赤 (黒背景に映える色) */
             --accent-color: #E74C3C;
-            /* 背景色: #ECF0F1 (ライトグレー) */
-            --bg-color: #ECF0F1;
-            --card-bg: #FFFFFF;
-            --text-color: #2C3E50;
-            --text-light: #7F8C8D;
-            --border-color: #BDC3C7;
+            /* 背景色: 深い黒・チャコールグレー */
+            --bg-color: #121212;
+            /* 幾何学パターンの色 (薄い白) */
+            --bg-pattern-color: rgba(255, 255, 255, 0.03);
+            /* カード背景: 背景より少し明るいグレー（不透明度を上げて文字を見やすく） */
+            --card-bg: #1E1E1E;
+            /* 本文文字色 */
+            --text-color: #CFD8DC;
+            /* 薄い文字色 */
+            --text-light: #90A4AE;
+            /* ボーダー色 */
+            --border-color: #37474F;
+            
+            /* ヘッダー背景 */
+            --header-bg: rgba(18, 18, 18, 0.95);
+            /* ヒーローセクション背景グラデーション (透過させて背面のパターンを見せる) */
+            --hero-bg: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(28,40,51,0.7) 100%);
+            
+            /* ガラスモーフィズム用 */
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             
             --transition: all 0.3s ease;
             --container-width: 1100px;
             --header-height: 70px;
         }
 
-        /* Dark Mode Override */
-        [data-theme="dark"] {
-            --primary-color: #ECF0F1; /* テキスト等は明るく */
-            --accent-color: #FF6B6B; /* 暗背景で映える少し明るい赤 */
-            --bg-color: #1a252f;      /* より深いダークブルー/グレー */
-            --card-bg: #2C3E50;
-            --text-color: #ECF0F1;
-            --text-light: #BDC3C7;
-            --border-color: #34495E;
+        /* ライトモード (ボタン切り替え用) */
+        [data-theme="light"] {
+            --primary-color: #2C3E50;
+            --accent-color: #E74C3C;
+            --bg-color: #ECF0F1;
+            --bg-pattern-color: rgba(0, 0, 0, 0.04); /* 薄い黒 */
+            --card-bg: #FFFFFF;
+            --text-color: #2C3E50;
+            --text-light: #7F8C8D;
+            --border-color: #BDC3C7;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --hero-bg: linear-gradient(135deg, rgba(236, 240, 241, 0.8) 0%, rgba(236, 240, 241, 0.5) 100%);
+            
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         /* * Global Reset & Base Styles 
@@ -60,6 +84,13 @@
             color: var(--text-color);
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+            
+            /* 幾何学模様（斜めストライプの交差） */
+            background-image: 
+                linear-gradient(45deg, var(--bg-pattern-color) 25%, transparent 25%, transparent 50%, var(--bg-pattern-color) 50%, var(--bg-pattern-color) 75%, transparent 75%, transparent),
+                linear-gradient(-45deg, var(--bg-pattern-color) 25%, transparent 25%, transparent 50%, var(--bg-pattern-color) 50%, var(--bg-pattern-color) 75%, transparent 75%, transparent);
+            background-size: 60px 60px; /* パターンのサイズ */
+            background-attachment: fixed; /* スクロールしても背景を固定 */
         }
 
         a {
@@ -148,17 +179,13 @@
             top: 0;
             width: 100%;
             height: var(--header-height);
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: var(--header-bg); /* 変数を使用 */
             backdrop-filter: blur(10px);
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             transition: background-color 0.3s ease;
-        }
-
-        [data-theme="dark"] header {
-            background-color: rgba(26, 37, 47, 0.95);
         }
 
         header .container {
@@ -186,6 +213,7 @@
             font-weight: 500;
             font-size: 0.95rem;
             position: relative;
+            color: var(--primary-color);
         }
 
         .nav-link::after {
@@ -227,7 +255,8 @@
             align-items: center;
             position: relative;
             padding-top: var(--header-height);
-            background: linear-gradient(135deg, rgba(44, 62, 80, 0.05) 0%, rgba(236, 240, 241, 0) 100%);
+            background: var(--hero-bg); /* 変数を使用 */
+            overflow: hidden; /* コンポジションのはみ出し防止 */
         }
 
         .hero-content {
@@ -259,38 +288,255 @@
             position: relative;
             display: flex;
             justify-content: center;
-        }
-
-        /* Abstract visual with CSS only */
-        .abstract-shape {
-            width: 400px;
+            perspective: 1000px; /* 3D効果用 */
             height: 400px;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            opacity: 0.8;
-            animation: morph 8s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            align-items: center;
         }
 
-        .abstract-shape::before {
+        /* ============================
+           Creative Composition Design (Original Tech Style)
+           ============================ */
+        .creative-composition {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 420px;
+            max-height: 320px;
+            transform-style: preserve-3d;
+            /* パネル全体を少し斜めに向ける */
+            transform: rotateY(-15deg) rotateX(5deg);
+            transition: transform 0.3s ease-out;
+        }
+
+        /* マウスホバーで少し動くインタラクション */
+        .hero-visual:hover .creative-composition {
+            transform: rotateY(-5deg) rotateX(0deg);
+        }
+
+        /* メインのガラス風パネル（抽象的なワークスペース） */
+        .main-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            /* 角ばったデザインでテック感を出す */
+            border-radius: 4px; 
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 2;
+            /* 独自の四隅の装飾 */
+            clip-path: polygon(
+                0 0, 
+                100% 0, 
+                100% calc(100% - 20px), 
+                calc(100% - 20px) 100%, 
+                0 100%
+            );
+        }
+        
+        /* 四隅の装飾ライン */
+        .main-frame::after {
             content: '';
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            animation: morph 8s ease-in-out infinite reverse;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.1) 50%);
+            z-index: 3;
         }
 
-        @keyframes morph {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
-            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+        /* オリジナルのヘッダーUI */
+        .frame-header {
+            height: 36px;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* 両端配置 */
+            padding: 0 15px;
         }
+
+        /* 独自のUIパーツ（OS非依存） */
+        .ui-status {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .ui-bar {
+            height: 4px;
+            border-radius: 2px;
+            background-color: rgba(255,255,255,0.3);
+        }
+        .ui-bar.long { width: 40px; }
+        .ui-bar.short { width: 12px; background-color: var(--accent-color); }
+
+        .ui-controls {
+            display: flex;
+            gap: 8px;
+        }
+        .ui-square {
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .frame-content {
+            flex: 1;
+            padding: 30px;
+            position: relative;
+            background: rgba(255,255,255,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* 中央の抽象グラフィック（波形・データ） */
+        .abstract-visualizer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 60px;
+        }
+
+        .wave-bar {
+            width: 6px;
+            background: linear-gradient(to top, var(--accent-color), #3498db);
+            border-radius: 3px;
+            animation: waveform 1.2s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(1) { height: 20px; animation-delay: 0.1s; }
+        .wave-bar:nth-child(2) { height: 40px; animation-delay: 0.2s; }
+        .wave-bar:nth-child(3) { height: 60px; animation-delay: 0.3s; }
+        .wave-bar:nth-child(4) { height: 35px; animation-delay: 0.4s; }
+        .wave-bar:nth-child(5) { height: 50px; animation-delay: 0.2s; }
+        .wave-bar:nth-child(6) { height: 25px; animation-delay: 0.5s; }
+
+        @keyframes waveform {
+            0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+            50% { transform: scaleY(1.2); opacity: 1; box-shadow: 0 0 15px var(--accent-color); }
+        }
+
+        /* 進行状況を示すプログレスUI */
+        .progress-ui {
+            width: 100%;
+            max-width: 240px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 65%;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        /* 浮遊アイコン (スタイル調整) */
+        .float-icon {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px; /* 少し角ばらせる */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            z-index: 4;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .icon-code {
+            top: -20px;
+            right: -20px;
+            animation-delay: 0s;
+            border-color: rgba(255,255,255,0.2);
+        }
+        .icon-pen {
+            bottom: 30px;
+            right: -40px;
+            animation-delay: 1.5s;
+            color: #3498db; 
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+        .icon-layer {
+            bottom: -30px;
+            left: 20px;
+            animation-delay: 0.5s;
+            color: #f1c40f; 
+            border-color: rgba(241, 196, 15, 0.3);
+        }
+
+        /* 背景パネル（グリッド装飾） */
+        .back-panel {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 100%;
+            height: 100%;
+            /* ドットグリッドに変更 */
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 10px 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            transform: translateZ(-60px);
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* グローエフェクト */
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140%;
+            height: 140%;
+            background: radial-gradient(circle, rgba(231, 76, 60, 0.1) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
 
         /* * About Section 
          */
@@ -350,7 +596,7 @@
         /* * Skills Section 
          */
         #skills {
-            background-color: rgba(0,0,0,0.02);
+            background-color: rgba(255,255,255,0.02); /* 黒背景用に調整 */
         }
 
         .skills-grid {
@@ -386,6 +632,7 @@
             margin-bottom: 15px;
             display: flex;
             align-items: center;
+            color: var(--text-color);
         }
 
         .skill-list i {
@@ -417,7 +664,7 @@
 
         .work-image {
             height: 200px;
-            background-color: #ddd;
+            background-color: #333; /* 黒背景用に調整 */
             overflow: hidden;
             position: relative;
         }
@@ -433,7 +680,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7); /* 暗めに */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -485,16 +732,29 @@
         .tag {
             font-size: 0.75rem;
             padding: 4px 10px;
-            background-color: var(--bg-color);
+            background-color: var(--bg-color); /* 背景色に追従 */
             color: var(--text-light);
+            border: 1px solid var(--border-color); /* 境界線追加で視認性向上 */
             border-radius: 4px;
         }
 
         /* * Contact Section 
          */
         #contact {
-            background-color: var(--primary-color);
+            background-color: #1a252f; /* より深い色に固定 */
             color: #fff;
+            position: relative;
+        }
+        
+        /* ダークモードでもContactは目立たせたいので少しアクセントを入れる */
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #1a252f, var(--accent-color), #1a252f);
         }
 
         #contact .section-title {
@@ -509,6 +769,7 @@
         .contact-text {
             text-align: center;
             margin-bottom: 40px;
+            color: #bdc3c7;
         }
 
         .contact-form {
@@ -516,6 +777,7 @@
             padding: 40px;
             border-radius: 15px;
             backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .form-group {
@@ -534,7 +796,7 @@
             padding: 12px 15px;
             border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.2);
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(0,0,0,0.3); /* 入力欄を暗く */
             color: #fff;
             font-family: inherit;
             transition: var(--transition);
@@ -543,7 +805,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--accent-color);
-            background-color: rgba(255,255,255,0.15);
+            background-color: rgba(0,0,0,0.5);
         }
 
         textarea.form-control {
@@ -565,7 +827,7 @@
         }
 
         .submit-btn:hover {
-            background-color: #c0392b;
+            opacity: 0.9;
             transform: translateY(-2px);
         }
 
@@ -597,7 +859,7 @@
         /* * Footer 
          */
         footer {
-            background-color: #1a252f;
+            background-color: #000;
             color: #7f8c8d;
             text-align: center;
             padding: 20px;
@@ -637,10 +899,20 @@
             .hero-visual {
                 order: -1;
             }
-            .abstract-shape {
-                width: 300px;
-                height: 300px;
+            /* レスポンシブ調整: モバイルではコンポジションを小さく */
+            .creative-composition {
+                transform: rotateY(0) rotateX(0); /* 3Dを弱める */
+                max-width: 320px;
+                max-height: 240px;
             }
+            .float-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            .icon-code { right: -10px; top: -10px; }
+            .icon-pen { right: -20px; bottom: 30px; }
+            
             #about .about-content {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -667,9 +939,7 @@
                 transition: 0.3s ease;
             }
             
-            [data-theme="dark"] .nav-menu {
-                background-color: #1a252f;
-            }
+            /* ライトモード時のメニュー背景対応は変数で行うため特記なし */
 
             .nav-menu.active {
                 left: 0;
@@ -721,7 +991,7 @@
 
             <div style="display: flex; align-items: center;">
                 <!-- Theme Toggle -->
-                <div class="theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                <div class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
                     <i class="fas fa-moon"></i>
                 </div>
                 <!-- Mobile Hamburger -->
@@ -746,8 +1016,59 @@
                     <a href="#contact" class="btn btn-outline">お問い合わせ</a>
                 </div>
             </div>
+            
+            <!-- Hero Visual: Creative Composition -->
             <div class="hero-visual fade-in">
-                <div class="abstract-shape"></div>
+                <div class="creative-composition">
+                    <!-- Main Frame (Abstract Workspace) -->
+                    <div class="main-frame">
+                        <!-- オリジナルのUIヘッダー -->
+                        <div class="frame-header">
+                            <div class="ui-status">
+                                <span class="ui-bar short"></span>
+                                <span class="ui-bar long"></span>
+                            </div>
+                            <div class="ui-controls">
+                                <span class="ui-square"></span>
+                                <span class="ui-square"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="frame-content">
+                            <!-- 抽象的なビジュアライザー（波形・コードの融合） -->
+                            <div class="abstract-visualizer">
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                            </div>
+                            
+                            <!-- 処理状況風UI -->
+                            <div class="progress-ui">
+                                <div class="progress-info">
+                                    <span>RENDERING...</span>
+                                    <span>65%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Back decorative panel for depth -->
+                    <div class="back-panel"></div>
+
+                    <!-- Floating Icons representing skills -->
+                    <div class="float-icon icon-code"><i class="fas fa-code"></i></div>
+                    <div class="float-icon icon-pen"><i class="fas fa-pen-nib"></i></div>
+                    <div class="float-icon icon-layer"><i class="fas fa-layer-group"></i></div>
+                    
+                    <!-- Background Glow -->
+                    <div class="glow-effect"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -759,7 +1080,6 @@
             <div class="about-content">
                 <div class="profile-img-wrapper fade-in">
                     <!-- Placeholder for profile image -->
-                    <!-- Updated text to 'Naoki' to prevent mojibake with the placeholder service -->
                     <img src="https://placehold.co/400x400/2C3E50/FFFFFF?text=Naoki" alt="ナオキ" class="profile-img">
                 </div>
                 <div class="about-text fade-in">
@@ -938,28 +1258,35 @@
                 });
             });
 
-            // 2. Dark/Light Mode Toggle
+            // 2. Dark/Light Mode Toggle (デフォルト黒、lightクラス付与で白)
             const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
             const icon = themeToggle.querySelector('i');
 
             // Check saved preference
+            // デフォルトがDarkなので、localStorageが'light'の時だけテーマ適用
             const currentTheme = localStorage.getItem('theme');
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'dark');
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'light');
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
+            } else {
+                // デフォルトアイコン (Moon)
+                icon.classList.add('fa-moon');
             }
 
             themeToggle.addEventListener('click', () => {
+                // data-theme="light" があるかチェック
                 if (body.hasAttribute('data-theme')) {
+                    // ライトモード -> ダークモード(デフォルト)へ
                     body.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
+                    localStorage.setItem('theme', 'dark');
                     icon.classList.remove('fa-sun');
                     icon.classList.add('fa-moon');
                 } else {
-                    body.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
+                    // ダークモード(デフォルト) -> ライトモードへ
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
                     icon.classList.remove('fa-moon');
                     icon.classList.add('fa-sun');
                 }
