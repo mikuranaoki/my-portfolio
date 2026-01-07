@@ -778,6 +778,8 @@
                     daybreakhorizon@gmail.com を設定してください。
                 -->
                 <form class="contact-form" name="contact" method="POST" data-netlify="true">
+                    <!-- メール件名の設定（Netlify Forms用） -->
+                    <input type="hidden" name="subject" value="ポートフォリオサイトからのお問い合わせ" />
                     <div class="form-group">
                         <label for="name">お名前</label>
                         <input type="text" id="name" name="name" class="form-control" required>
